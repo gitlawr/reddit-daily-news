@@ -1,0 +1,38 @@
+name: Daily Reddit News
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天 UTC 时间 00:00 运行
+  workflow_dispatch:      # 允许手动触发
+
+jobs:
+  generate-news:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run news generator
+      env:
+        PRAW_CLIENT_ID: ${{ secrets.PRAW_CLIENT_ID }}
+        PRAW_CLIENT_SECRET: ${{ secrets.PRAW_CLIENT_SECRET }}
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: |
+        python main.py \
+          --praw-client-id "$PRAW_CLIENT_ID" \
+          --praw-client-secret "$PRAW_CLIENT_SECRET" \
+          --subreddit-list "${{ vars.SUBREDDIT_LIST }}" \
+          --github-token "$GH_TOKEN" \
+          --top-limit "${{ vars.TOP_LIMIT }}"

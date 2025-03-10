@@ -1,0 +1,6 @@
+praw>=7.8.1
+loguru>=0.7.3
+pytest>=8.3.5
+pydantic>=2.10.6
+python-dotenv>=1.0.1
+PyGithub>=2.6.1
