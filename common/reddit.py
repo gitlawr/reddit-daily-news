@@ -1,3 +1,4 @@
+import datetime
 from typing import List, Dict
 
 import loguru
@@ -37,3 +38,31 @@ def get_submission_dict(subreddit_list: List[str], reddit: Reddit,
             submission_dict.setdefault(subreddit, []).append(submission)
 
     return submission_dict
+
+
+def generate_reddit_daily_markdown(subreddit_data: Dict[str, List[Submission]]):
+    """
+    生成Reddit每日新闻的Markdown内容
+    :param subreddit_data:
+    :return:
+    """
+    # 获取当前日期并格式化为YYYY-MM-DD
+    current_date = datetime.date.today().strftime("%Y-%m-%d")
+
+    # 初始化Markdown内容，添加主标题
+    markdown_content = [f"# Reddit News Daily {current_date}"]
+
+    # 遍历每个subreddit（按字母顺序排序）
+    for subreddit in subreddit_data.keys():
+        # 添加子标题
+        markdown_content.append(f"\n## {subreddit}")
+
+        # 添加该subreddit下的所有帖子链接
+        for submission in subreddit_data[subreddit]:
+            title, link, score = submission.title, submission.url, submission.score
+            comment_length = len(submission.comments)
+            markdown_content.append(f"- [{title}]({link})")
+            markdown_content.append(f"  - Score: {score}, Comments: {comment_length}")
+
+    # 将列表合并为字符串并返回
+    return '\n'.join(markdown_content)
