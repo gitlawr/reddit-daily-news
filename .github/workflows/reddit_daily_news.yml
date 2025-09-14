@@ -28,12 +28,11 @@ jobs:
       env:
         PRAW_CLIENT_ID: ${{ secrets.PRAW_CLIENT_ID }}
         PRAW_CLIENT_SECRET: ${{ secrets.PRAW_CLIENT_SECRET }}
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
       run: |
         python main.py \
           --praw-client-id "$PRAW_CLIENT_ID" \
           --praw-client-secret "$PRAW_CLIENT_SECRET" \
           --subreddit-list "${{ vars.SUBREDDIT_LIST }}" \
           --github-repo "${{ github.repository }}" \
-          --github-token "$GH_TOKEN" \
+          --github-token "${{ github.token }}" \
           --top-limit "${{ vars.TOP_LIMIT }}"
