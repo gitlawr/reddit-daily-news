@@ -34,5 +34,6 @@ jobs:
           --praw-client-id "$PRAW_CLIENT_ID" \
           --praw-client-secret "$PRAW_CLIENT_SECRET" \
           --subreddit-list "${{ vars.SUBREDDIT_LIST }}" \
+          --github-repo "${{ github.repository }}" \
           --github-token "$GH_TOKEN" \
           --top-limit "${{ vars.TOP_LIMIT }}"
